@@ -4,7 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { ArcadeBackground } from '@/components/arcade/ArcadeBackground';
 import { ArcadeButton } from '@/components/arcade/ArcadeButton';
 import { ArcadeInput } from '@/components/arcade/ArcadeInput';
-import { Mail, Lock, User, Gamepad2 } from 'lucide-react';
+import { Mail, Lock, User, AudioWaveform } from 'lucide-react';
 import { toast } from 'sonner';
 
 const Register: React.FC = () => {
@@ -37,7 +37,7 @@ const Register: React.FC = () => {
     setIsLoading(true);
     try {
       await register(username, email, password);
-      toast.success('Account created! Welcome to the arcade!');
+      toast.success('Account created successfully!');
       navigate('/dashboard');
     } catch (error: any) {
       toast.error(error.message || 'Registration failed');
@@ -52,21 +52,23 @@ const Register: React.FC = () => {
         <div className="w-full max-w-md">
           {/* Logo */}
           <div className="text-center mb-8 animate-fade-in">
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded-lg bg-gradient-to-br from-neon-magenta to-neon-purple mb-4 animate-glow-pulse">
-              <Gamepad2 size={40} className="text-arcade-black" />
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-neon-magenta to-neon-purple mb-4">
+              <AudioWaveform size={32} className="text-arcade-black" />
             </div>
-            <h1 className="font-pixel text-2xl neon-text-magenta mb-2">JOIN ARCADE</h1>
-            <p className="font-arcade text-sm text-muted-foreground">CREATE YOUR ACCOUNT</p>
+            <h1 className="font-arcade text-3xl font-bold bg-gradient-to-r from-neon-magenta to-neon-purple bg-clip-text text-transparent mb-2">
+              Get Started
+            </h1>
+            <p className="font-arcade text-sm text-muted-foreground">Create your account</p>
           </div>
 
           {/* Register Form */}
           <div className="arcade-card animate-slide-up" style={{ animationDelay: '0.2s' }}>
             <div className="text-center mb-6">
-              <h2 className="font-pixel text-sm neon-text-cyan">
-                NEW PLAYER
+              <h2 className="font-arcade text-lg font-semibold text-foreground">
+                Sign Up
               </h2>
-              <p className="font-arcade text-xs text-muted-foreground mt-2">
-                Enter your details to begin
+              <p className="font-arcade text-xs text-muted-foreground mt-1">
+                Enter your details to get started
               </p>
             </div>
 
@@ -74,7 +76,7 @@ const Register: React.FC = () => {
               <ArcadeInput
                 label="Username"
                 type="text"
-                placeholder="PLAYER_ONE"
+                placeholder="Your username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 icon={<User size={18} />}
@@ -83,7 +85,7 @@ const Register: React.FC = () => {
               <ArcadeInput
                 label="Email"
                 type="email"
-                placeholder="player@arcade.com"
+                placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 icon={<Mail size={18} />}
@@ -114,24 +116,24 @@ const Register: React.FC = () => {
                   className="w-full"
                   disabled={isLoading}
                 >
-                  {isLoading ? 'CREATING...' : 'CREATE ACCOUNT'}
+                  {isLoading ? 'Creating account...' : 'Create Account'}
                 </ArcadeButton>
               </div>
             </form>
 
             <div className="mt-6 text-center">
               <p className="font-arcade text-xs text-muted-foreground">
-                ALREADY A PLAYER?{' '}
-                <Link to="/login" className="text-neon-cyan hover:text-neon-blue transition-colors">
-                  SIGN IN
+                Already have an account?{' '}
+                <Link to="/login" className="text-neon-cyan hover:text-neon-blue transition-colors font-medium">
+                  Sign In
                 </Link>
               </p>
             </div>
           </div>
 
           {/* Bottom text */}
-          <p className="text-center mt-6 font-pixel text-[0.5rem] text-muted-foreground animate-fade-in" style={{ animationDelay: '0.4s' }}>
-            © 2024 NEON BEATS ARCADE
+          <p className="text-center mt-6 font-arcade text-xs text-muted-foreground animate-fade-in" style={{ animationDelay: '0.4s' }}>
+            © 2024 Neon Beats
           </p>
         </div>
       </div>
