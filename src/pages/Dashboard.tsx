@@ -5,12 +5,13 @@ import { useAudioContext } from '@/contexts/AudioContext';
 import { ArcadeBackground } from '@/components/arcade/ArcadeBackground';
 import { ArcadeButton } from '@/components/arcade/ArcadeButton';
 import { WaveformPreview } from '@/components/arcade/WaveformPreview';
+import { MiniPlayer } from '@/components/arcade/MiniPlayer';
 import { Upload, Mic, Palette, Play, LogOut, Music, Sparkles, Zap } from 'lucide-react';
 import { toast } from 'sonner';
 
 const Dashboard: React.FC = () => {
   const { user, logout } = useAuth();
-  const { loadAudioFile, startMicrophone, isPlaying, audioSource, stopAudio } = useAudioContext();
+  const { loadAudioFile, startMicrophone, stopMicrophone, isMicrophoneActive, isPlaying, audioSource, stopAudio } = useAudioContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const [isLoadingMic, setIsLoadingMic] = useState(false);
@@ -33,15 +34,20 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const handleMicrophoneStart = async () => {
-    setIsLoadingMic(true);
-    try {
-      await startMicrophone();
-      toast.success('Microphone activated!');
-    } catch (error) {
-      toast.error('Could not access microphone. Please allow permission.');
-    } finally {
-      setIsLoadingMic(false);
+  const handleMicrophoneToggle = async () => {
+    if (isMicrophoneActive) {
+      stopMicrophone();
+      toast.success('Microphone deactivated!');
+    } else {
+      setIsLoadingMic(true);
+      try {
+        await startMicrophone();
+        toast.success('Microphone activated!');
+      } catch (error) {
+        toast.error('Could not access microphone. Please allow permission.');
+      } finally {
+        setIsLoadingMic(false);
+      }
     }
   };
 
@@ -138,13 +144,13 @@ const Dashboard: React.FC = () => {
               <ArcadeButton
                 variant="magenta"
                 className="w-full"
-                onClick={handleMicrophoneStart}
+                onClick={handleMicrophoneToggle}
                 disabled={isLoadingMic}
               >
                 <Mic size={16} className="mr-2" />
-                {isLoadingMic ? 'CONNECTING...' : audioSource === 'microphone' ? 'MIC ACTIVE' : 'START MIC'}
+                {isLoadingMic ? 'CONNECTING...' : isMicrophoneActive ? 'STOP MIC' : 'START MIC'}
               </ArcadeButton>
-              {audioSource === 'microphone' && (
+              {isMicrophoneActive && (
                 <p className="mt-3 font-arcade text-xs text-neon-green flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-neon-green animate-pulse" />
                   Microphone active
@@ -187,7 +193,7 @@ const Dashboard: React.FC = () => {
               <ArcadeButton
                 variant="cyan"
                 className="w-full"
-                onClick={() => navigate('/visualizer')}
+                onClick={() => navigate('/customizer')}
               >
                 <Palette size={16} className="mr-2" />
                 CUSTOMIZE
@@ -219,6 +225,9 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Mini Player */}
+      <MiniPlayer />
     </ArcadeBackground>
   );
 };

@@ -7,10 +7,17 @@ interface AudioContextType {
   frequencyData: Uint8Array<ArrayBuffer> | null;
   isPlaying: boolean;
   audioSource: 'file' | 'microphone' | null;
+  isMicrophoneActive: boolean;
+  currentTime: number;
+  duration: number;
   initAudio: () => void;
   loadAudioFile: (file: File) => Promise<void>;
   startMicrophone: () => Promise<void>;
+  stopMicrophone: () => void;
   stopAudio: () => void;
+  playAudio: () => void;
+  pauseAudio: () => void;
+  seekAudio: (time: number) => void;
   getAverageFrequency: () => number;
   getBassFrequency: () => number;
   getMidFrequency: () => number;
@@ -34,6 +41,9 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [frequencyData, setFrequencyData] = useState<Uint8Array<ArrayBuffer> | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioSource, setAudioSource] = useState<'file' | 'microphone' | null>(null);
+  const [isMicrophoneActive, setIsMicrophoneActive] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   
   const audioElementRef = useRef<HTMLAudioElement | null>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
@@ -88,6 +98,15 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     analyserNode.connect(ctx.destination);
     sourceNodeRef.current = source;
 
+    // Track time updates
+    audio.addEventListener('timeupdate', () => {
+      setCurrentTime(audio.currentTime);
+    });
+    
+    audio.addEventListener('loadedmetadata', () => {
+      setDuration(audio.duration);
+    });
+
     audio.play();
     setIsPlaying(true);
     setAudioSource('file');
@@ -124,11 +143,26 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
       setIsPlaying(true);
       setAudioSource('microphone');
+      setIsMicrophoneActive(true);
     } catch (err) {
       console.error('Error accessing microphone:', err);
       throw err;
     }
   }, [initAudio]);
+
+  const stopMicrophone = useCallback(() => {
+    if (mediaStreamRef.current) {
+      mediaStreamRef.current.getTracks().forEach(track => track.stop());
+      mediaStreamRef.current = null;
+    }
+    if (sourceNodeRef.current) {
+      sourceNodeRef.current.disconnect();
+      sourceNodeRef.current = null;
+    }
+    setIsPlaying(false);
+    setAudioSource(null);
+    setIsMicrophoneActive(false);
+  }, []);
 
   const stopAudio = useCallback(() => {
     if (audioElementRef.current) {
@@ -145,6 +179,30 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
     setIsPlaying(false);
     setAudioSource(null);
+    setIsMicrophoneActive(false);
+    setCurrentTime(0);
+    setDuration(0);
+  }, []);
+
+  const playAudio = useCallback(() => {
+    if (audioElementRef.current) {
+      audioElementRef.current.play();
+      setIsPlaying(true);
+    }
+  }, []);
+
+  const pauseAudio = useCallback(() => {
+    if (audioElementRef.current) {
+      audioElementRef.current.pause();
+      setIsPlaying(false);
+    }
+  }, []);
+
+  const seekAudio = useCallback((time: number) => {
+    if (audioElementRef.current) {
+      audioElementRef.current.currentTime = time;
+      setCurrentTime(time);
+    }
   }, []);
 
   const getAverageFrequency = useCallback(() => {
@@ -186,10 +244,17 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       frequencyData,
       isPlaying,
       audioSource,
+      isMicrophoneActive,
+      currentTime,
+      duration,
       initAudio,
       loadAudioFile,
       startMicrophone,
+      stopMicrophone,
       stopAudio,
+      playAudio,
+      pauseAudio,
+      seekAudio,
       getAverageFrequency,
       getBassFrequency,
       getMidFrequency,

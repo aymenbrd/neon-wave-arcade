@@ -3,12 +3,12 @@ import { useVisualizer, VisualizerTheme } from '@/contexts/VisualizerContext';
 import { Shuffle, Zap, Gauge, Wind, Radio } from 'lucide-react';
 
 const themes: { id: VisualizerTheme; name: string; icon: string }[] = [
-  { id: 'neon-tunnel', name: 'NEON TUNNEL', icon: '🌀' },
+  { id: 'dual-pulse-waves', name: 'DUAL PULSE WAVES', icon: '〰️' },
   { id: 'retro-equalizer', name: 'RETRO EQ', icon: '📊' },
-  { id: 'particle-explosion', name: 'PARTICLES', icon: '💥' },
+  { id: 'pixel-shockwave', name: 'PSYCHO BLOOM CONTOURS', icon: '🌀' },
   { id: 'galaxy-spiral', name: 'GALAXY', icon: '🌌' },
   { id: 'waveform-ribbon', name: 'WAVEFORM', icon: '〰️' },
-  { id: 'pixel-fireworks', name: 'FIREWORKS', icon: '🎆' },
+  { id: 'pulse-mirror-spectrum', name: 'PULSE MIRROR', icon: '📡' },
 ];
 
 const colorPresets = [

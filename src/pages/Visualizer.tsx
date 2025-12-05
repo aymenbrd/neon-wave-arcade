@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAudioContext } from '@/contexts/AudioContext';
 import { VisualizerCanvas } from '@/components/visualizers/VisualizerCanvas';
 import { CustomizationPanel } from '@/components/panels/CustomizationPanel';
+import { MiniPlayer } from '@/components/arcade/MiniPlayer';
 import { ArrowLeft, Settings, Upload, Mic, MicOff, Share2, Maximize, Minimize, X } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -168,6 +169,11 @@ const Visualizer: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Mini Player */}
+      <div className="absolute bottom-20 left-4 right-4 md:bottom-4 md:right-4 md:max-w-sm z-20">
+        <MiniPlayer />
+      </div>
 
       {/* Decorative corners */}
       <div className="absolute top-2 left-2 w-8 h-8 border-l-2 border-t-2 border-neon-cyan/30" />

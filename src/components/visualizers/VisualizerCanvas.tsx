@@ -1,11 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useVisualizer } from '@/contexts/VisualizerContext';
-import { NeonTunnel } from './NeonTunnel';
+import { DualPulseWaves } from './NeonTunnel';
 import { RetroEqualizer } from './RetroEqualizer';
-import { ParticleExplosion } from './ParticleExplosion';
+import { Spiderweb } from './ParticleExplosion';
 import { GalaxySpiral } from './GalaxySpiral';
 import { WaveformRibbon } from './WaveformRibbon';
-import { PixelFireworks } from './PixelFireworks';
+import { PulseMirrorSpectrum } from './Sonosoidale';
 
 export const VisualizerCanvas: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -31,20 +31,20 @@ export const VisualizerCanvas: React.FC = () => {
     const props = { width: dimensions.width, height: dimensions.height };
     
     switch (settings.theme) {
-      case 'neon-tunnel':
-        return <NeonTunnel {...props} />;
+      case 'dual-pulse-waves':
+        return <DualPulseWaves {...props} />;
       case 'retro-equalizer':
         return <RetroEqualizer {...props} />;
-      case 'particle-explosion':
-        return <ParticleExplosion {...props} />;
+      case 'pixel-shockwave':
+        return <Spiderweb {...props} />;
       case 'galaxy-spiral':
         return <GalaxySpiral {...props} />;
       case 'waveform-ribbon':
         return <WaveformRibbon {...props} />;
-      case 'pixel-fireworks':
-        return <PixelFireworks {...props} />;
+      case 'pulse-mirror-spectrum':
+        return <PulseMirrorSpectrum {...props} />;
       default:
-        return <NeonTunnel {...props} />;
+        return <DualPulseWaves {...props} />;
     }
   };
 

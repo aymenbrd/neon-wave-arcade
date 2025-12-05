@@ -1,12 +1,12 @@
 import React, { createContext, useContext, useState } from 'react';
 
 export type VisualizerTheme = 
-  | 'neon-tunnel'
+  | 'dual-pulse-waves'
   | 'retro-equalizer'
-  | 'particle-explosion'
+  | 'pixel-shockwave'
   | 'galaxy-spiral'
   | 'waveform-ribbon'
-  | 'pixel-fireworks';
+  | 'pulse-mirror-spectrum';
 
 export interface VisualizerSettings {
   theme: VisualizerTheme;
@@ -26,10 +26,10 @@ interface VisualizerContextType {
 }
 
 const defaultSettings: VisualizerSettings = {
-  theme: 'neon-tunnel',
+  theme: 'dual-pulse-waves',
   primaryColor: '#00ffff',
   secondaryColor: '#ff00ff',
-  backgroundColor: '#0a0a1a',
+    backgroundColor: '#000000',
   intensity: 1,
   speed: 1,
   sensitivity: 1,
@@ -57,12 +57,12 @@ export const VisualizerProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   };
 
   const themes: VisualizerTheme[] = [
-    'neon-tunnel',
+    'dual-pulse-waves',
     'retro-equalizer',
-    'particle-explosion',
+    'pixel-shockwave',
     'galaxy-spiral',
     'waveform-ribbon',
-    'pixel-fireworks',
+    'pulse-mirror-spectrum',
   ];
 
   const randomizeTheme = () => {
